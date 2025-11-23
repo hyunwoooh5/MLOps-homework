@@ -4,8 +4,8 @@ import pickle
 import pandas as pd
 
 
-
 categorical = ['PULocationID', 'DOLocationID']
+
 
 def read_data(filename):
     df = pd.read_parquet(filename)
@@ -20,8 +20,6 @@ def read_data(filename):
     return df
 
 
-
-
 if __name__ == '__main__':
     import argparse
 
@@ -33,12 +31,11 @@ if __name__ == '__main__':
     year = args.year
     month = args.month
 
-    df = read_data(f'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year:04d}-{month:02d}.parquet')
-
+    df = read_data(
+        f'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year:04d}-{month:02d}.parquet')
 
     with open('model.bin', 'rb') as f_in:
         dv, model = pickle.load(f_in)
-
 
     dicts = df[categorical].to_dict(orient='records')
     X_val = dv.transform(dicts)
@@ -46,5 +43,5 @@ if __name__ == '__main__':
 
     print(y_pred.mean())
 
-    #df['ride_id'] = f'{2023:04d}/{3:02d}_' + df.index.astype('str')
-    #df_result = df.loc[:,['ride_id', 'duration']]
+    # df['ride_id'] = f'{2023:04d}/{3:02d}_' + df.index.astype('str')
+    # df_result = df.loc[:,['ride_id', 'duration']]
